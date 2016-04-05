@@ -40,7 +40,7 @@ namespace GameEngine
         }
 
         public bool collision(Character ch, Cube c)
-        {
+        {  
 
             Rectangle chRec = new Rectangle(ch.x, ch.y, ch.size, ch.size);
             Rectangle cRec = new Rectangle(c.x, c.y, c.size, c.size);
