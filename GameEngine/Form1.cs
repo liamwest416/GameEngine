@@ -16,7 +16,14 @@ namespace GameEngine
         {
             InitializeComponent();
             GameScreen gs = new GameScreen();
+
             this.Controls.Add(gs);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+       
+        
         }
     }
 }

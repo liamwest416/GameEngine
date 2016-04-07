@@ -15,13 +15,22 @@ namespace GameEngine
 
         //player1 button control keys 
         Boolean leftArrowDown, downArrowDown, rightArrowDown, upArrowDown, qArrowDown, wArrowDown;
-
-        Player Pl = new Player(500, 400, 30, 5, new Image[] { Properties.Resources.HeroPlayer });
+        int direction = 0;
+        Image[] playerImage = new Image[] { Properties.Resources.HeroPlayer, Properties.Resources.HeroPlayerLeft };
+        Player Pl;
 
 
         public GameScreen()
         {
+          
             InitializeComponent();
+
+           
+            Pl = new Player(100, 100, 7, 5, playerImage);
+
+
+            gameTimer.Enabled = true;
+            gameTimer.Start();
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -79,16 +88,33 @@ namespace GameEngine
                     break;
             }
         }
-        private void gameLoop_Tick(object sender, EventArgs e)
+        private void gameTimer_Tick(object sender, EventArgs e)
         {
+           
             if (leftArrowDown)
             {
                 Pl.move(Pl, "Left");
+                direction = 1;
             }
             else if (rightArrowDown)
             {
                 Pl.move(Pl, "Right");
+                direction = 0;
             }
+            if (upArrowDown)
+            {
+                Pl.move(Pl, "Up");
+            }
+            else if (downArrowDown)
+            {
+                Pl.move(Pl, "Down");
+            }
+
+            Refresh();
+        }
+        private void GameScreen_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawImage(playerImage[direction], Pl.x, Pl.y);
         }
     }
 }

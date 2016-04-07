@@ -10,7 +10,9 @@ namespace GameEngine
     class Player
     {
         public int x, y, size, speed, images;
-        public Image[] playerImages = new Image[4];
+        public Image[] playerImages = new Image[1];
+
+       
 
         public Player(int _x, int _y, int _size, int _speed, Image[] _playerImages)
         {
@@ -19,7 +21,10 @@ namespace GameEngine
             size = _size;
             speed = _speed;
             playerImages = _playerImages;
+            
         }
+
+        
 
         public void move(Player Pl, string direction)
         {
@@ -28,12 +33,12 @@ namespace GameEngine
                 Pl.x -= Pl.speed;
             }
 
-            else
+            else if (direction == "Right")
             {
                 Pl.x += Pl.speed;
             }
 
-            if (direction == "Up")
+            else if (direction == "Up")
             {
                 Pl.y -= Pl.speed;
             }
@@ -45,24 +50,9 @@ namespace GameEngine
 
         }
 
-        public bool collision(Player Pl, Bullet b)
-        {
-
-            Rectangle PlRec = new Rectangle(Pl.x, Pl.y, Pl.size, Pl.size);
-            Rectangle bRec = new Rectangle(b.x, b.y, b.size, b.size);
-
-            if (PlRec.IntersectsWith(bRec))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-
+    
+            
         }
-    }
 }
 
 

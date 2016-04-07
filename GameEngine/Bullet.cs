@@ -21,40 +21,22 @@ namespace GameEngine
         {
             if (direction == "Left")
             {
-                ch.x -= ch.speed;
+                b.x -= ch.speed;
             }
 
             else
             {
-                ch.x += ch.speed;
+                b.x += ch.speed;
             }
 
             if (direction == "Up")
             {
                 b.y -= b.speed;
-            }
+             }
             else
             {
                 b.y += b.speed;
             }
-        }
-
-        public bool collision(Character ch, Cube c)
-        {  
-
-            Rectangle chRec = new Rectangle(ch.x, ch.y, ch.size, ch.size);
-            Rectangle cRec = new Rectangle(c.x, c.y, c.size, c.size);
-
-            if (chRec.IntersectsWith(cRec))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-
         }
     }
 }
