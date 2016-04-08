@@ -8,30 +8,42 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/// <summary>
+/// Simple game engine that I created with the majority of the code from other programs. 
+/// This game was completed on April 10, 2016.
+/// Focuses on player that has movement, and the ability to fire at the programed enemy.
+/// The goal of the enemy was to create a bot that could dodge bullets incoming from the player
+/// and also fire towards the player.
+/// </summary>
+
 namespace GameEngine
 {
     public partial class GameScreen : UserControl
     {
 
-        //player1 button control keys 
+        //Global Variables
         Boolean leftArrowDown, downArrowDown, rightArrowDown, upArrowDown, qArrowDown, wArrowDown, spaceArrowDown;
         int direction = 0;
+        int counter = 12;
         Image[] playerImage = new Image[] { Properties.Resources.HeroPlayer, Properties.Resources.HeroPlayerLeft };
+        Image[] enemyImage = new Image[] { Properties.Resources.rsz_enemysforengine };
         Player Pl;
-
+        Enemy En;
         List<Bullets> bullets = new List<Bullets>();
         Pen bulletsPen = new Pen(Color.DarkGoldenrod);
-       
+        SolidBrush bulletsBrush = new SolidBrush(Color.DarkGoldenrod);
+
 
         public GameScreen()
         {
-          
+
             InitializeComponent();
 
-       
+            //Player attributes 
             Pl = new Player(100, 100, 60, 5, playerImage);
-
-
+            En = new Enemy(550, 450, 60, 4, enemyImage);
+            
+            //Starting the game timer
             gameTimer.Enabled = true;
             gameTimer.Start();
         }
@@ -58,6 +70,9 @@ namespace GameEngine
                     break;
                 case Keys.W:
                     wArrowDown = true;
+                    break;
+                case Keys.Space:
+                    spaceArrowDown = true;
                     break;
                 default:
                     break;
@@ -88,14 +103,19 @@ namespace GameEngine
                     wArrowDown = false;
                     break;
                 case Keys.Space:
-
+                    spaceArrowDown = false;
+                    break;
                 default:
                     break;
             }
         }
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            counter--;
 
+
+
+            // Movement for player, also changes the direction of the image
             if (leftArrowDown)
             {
                 Pl.move(Pl, "Left");
@@ -114,50 +134,62 @@ namespace GameEngine
             {
                 Pl.move(Pl, "Down");
             }
-            else if (spaceArrowDown)
-            {
-                
-               
+
+
+
+
+            // Bullet fire for the player
+            if (spaceArrowDown &&  counter < 0)
+
+
                 if (direction == 0)
                 {
-                    Bullets Bs = new Bullets(Pl.x, Pl.y, 5, 15, "Right");
-                    bullets.Add(Bs);
                    
+                    
+                        Bullets Bs = new Bullets(Pl.x, Pl.y, 5, 6, "Right");
+                        bullets.Add(Bs);
+                        counter = 12;
+
                 }
 
                 else if (direction == 1)
                 {
-                    Bullets Bs = new Bullets(Pl.x, Pl.y, 5, 15, "Left");
-                    bullets.Add(Bs);
                     
+             
+                        Bullets Bs = new Bullets(Pl.x, Pl.y, 5, 6, "Left");
+                        bullets.Add(Bs);
+                        counter = 12;
+
+
 
                 }
 
 
 
-            }
-
             //foreach bullet  b  -  b.move(b);
             foreach (Bullets Bs in bullets)
             {
-            
-                    Bs.move(Bs);
-                
+
+                Bs.move(Bs);
+
 
             }
-        
+
 
             Refresh();
+      
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(playerImage[direction], Pl.x, Pl.y, Pl.size,Pl.size);
+            //Drawing images of monster, player, and bullets
+            e.Graphics.DrawImage(playerImage[direction], Pl.x, Pl.y, Pl.size, Pl.size);
+            e.Graphics.DrawImage(enemyImage[direction], En.x, En.y, En.size, En.size);
 
             foreach (Bullets Bs in bullets)
             {
-                e.Graphics.DrawRectangle(bulletsPen, Bs.x, Bs.y, Bs.size, Bs.size);
+                e.Graphics.DrawRectangle(bulletsPen, Bs.x, Bs.y, Bs.size + 4, Bs.size);
+                e.Graphics.FillRectangle(bulletsBrush, Bs.x, Bs.y, Bs.size + 4, Bs.size);
             }
-        
         }
     }
 }
