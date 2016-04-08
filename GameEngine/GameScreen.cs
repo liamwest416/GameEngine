@@ -14,19 +14,22 @@ namespace GameEngine
     {
 
         //player1 button control keys 
-        Boolean leftArrowDown, downArrowDown, rightArrowDown, upArrowDown, qArrowDown, wArrowDown;
+        Boolean leftArrowDown, downArrowDown, rightArrowDown, upArrowDown, qArrowDown, wArrowDown, spaceArrowDown;
         int direction = 0;
         Image[] playerImage = new Image[] { Properties.Resources.HeroPlayer, Properties.Resources.HeroPlayerLeft };
         Player Pl;
 
+        List<Bullets> bullets = new List<Bullets>();
+        Pen bulletsPen = new Pen(Color.DarkGoldenrod);
+       
 
         public GameScreen()
         {
           
             InitializeComponent();
 
-           
-            Pl = new Player(100, 100, 7, 5, playerImage);
+       
+            Pl = new Player(100, 100, 60, 5, playerImage);
 
 
             gameTimer.Enabled = true;
@@ -84,13 +87,15 @@ namespace GameEngine
                 case Keys.W:
                     wArrowDown = false;
                     break;
+                case Keys.Space:
+
                 default:
                     break;
             }
         }
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-           
+
             if (leftArrowDown)
             {
                 Pl.move(Pl, "Left");
@@ -109,12 +114,50 @@ namespace GameEngine
             {
                 Pl.move(Pl, "Down");
             }
+            else if (spaceArrowDown)
+            {
+                
+               
+                if (direction == 0)
+                {
+                    Bullets Bs = new Bullets(Pl.x, Pl.y, 5, 15, "Right");
+                    bullets.Add(Bs);
+                   
+                }
+
+                else if (direction == 1)
+                {
+                    Bullets Bs = new Bullets(Pl.x, Pl.y, 5, 15, "Left");
+                    bullets.Add(Bs);
+                    
+
+                }
+
+
+
+            }
+
+            //foreach bullet  b  -  b.move(b);
+            foreach (Bullets Bs in bullets)
+            {
+            
+                    Bs.move(Bs);
+                
+
+            }
+        
 
             Refresh();
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(playerImage[direction], Pl.x, Pl.y);
+            e.Graphics.DrawImage(playerImage[direction], Pl.x, Pl.y, Pl.size,Pl.size);
+
+            foreach (Bullets Bs in bullets)
+            {
+                e.Graphics.DrawRectangle(bulletsPen, Bs.x, Bs.y, Bs.size, Bs.size);
+            }
+        
         }
     }
 }
